@@ -14,11 +14,23 @@ const UptimeMonitor = () => {
   });
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [siteUptime, setSiteUptime] = useState(0);
 
   useEffect(() => {
     loadServices();
     const interval = setInterval(loadServices, 30000);
-    return () => clearInterval(interval);
+    
+    // Track site uptime
+    const startTime = Date.now();
+    const uptimeInterval = setInterval(() => {
+      const uptime = Math.floor((Date.now() - startTime) / 1000);
+      setSiteUptime(uptime);
+    }, 1000);
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(uptimeInterval);
+    };
   }, []);
 
   const loadServices = async () => {
@@ -48,6 +60,13 @@ const UptimeMonitor = () => {
   };
 
   const handleDeleteService = async (id) => {
+    const password = prompt('Enter admin password to delete:');
+    
+    if (password !== 'darex123') {
+      alert('Incorrect password!');
+      return;
+    }
+
     if (!confirm('Are you sure you want to delete this service?')) return;
 
     try {
@@ -91,13 +110,36 @@ const UptimeMonitor = () => {
     return `${uptime.toFixed(1)}%`;
   };
 
+  const formatSiteUptime = (seconds) => {
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m ${secs}s`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m ${secs}s`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${secs}s`;
+    } else {
+      return `${secs}s`;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Activity className="w-10 h-10 text-blue-400" />
-            <h1 className="text-4xl font-bold text-white">Zero Ping Uptime Monitor</h1>
+            <div>
+              <h1 className="text-4xl font-bold text-white">Zero Ping Uptime Monitor</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Clock className="w-4 h-4 text-green-400" />
+                <span className="text-sm text-green-400">Site Uptime: {formatSiteUptime(siteUptime)}</span>
+              </div>
+            </div>
           </div>
           <button
             onClick={handleRefresh}

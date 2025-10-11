@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
 // Create service
 router.post('/', async (req, res) => {
   try {
-    const { name, url, interval } = req.body;
+    const { name, url, pingInterval } = req.body;
 
     if (!name || !url) {
       return res.status(400).json({ error: 'Name and URL are required' });
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
     const service = new Service({
       name,
       url,
-      interval: interval || 5,
+      interval: pingInterval || 5,
       nextPingAt: new Date()
     });
 
@@ -89,6 +89,22 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Service not found' });
     }
     res.json({ message: 'Service deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Toggle service active status
+router.patch('/:id/toggle', async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    service.isActive = !service.isActive;
+    await service.save();
+    res.json(service);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
