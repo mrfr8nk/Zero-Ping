@@ -13,7 +13,21 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
+      /\.replit\.dev$/,
+      /\.onrender\.com$/
+    ].filter(Boolean);
+    
+    if (!origin || allowedOrigins.some(allowed => 
+      typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+    )) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all for development
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
