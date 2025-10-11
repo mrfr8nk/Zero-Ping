@@ -9,7 +9,10 @@ export default defineConfig({
     hmr: {
       clientPort: 443
     },
-    allowedHosts: 'all',
+    allowedHosts: [
+      '.replit.dev',
+      '.repl.co'
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
