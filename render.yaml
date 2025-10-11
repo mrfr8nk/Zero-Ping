@@ -1,38 +1,18 @@
 services:
-  # Backend Service
+  # Full Stack Service (Frontend + Backend in one)
   - type: web
-    name: uptime-monitor-backend
+    name: zero-ping-uptime-monitor
     env: node
     region: oregon
     plan: free
-    rootDir: backend
-    buildCommand: cd .. && npm install && cd backend && npm install
-    startCommand: node src/server.js
-    healthCheckPath: /health
+    buildCommand: npm install && cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && node src/server.js
+    healthCheckPath: /api/health
     envVars:
       - key: MONGODB_URI
-        value: mongodb+srv://darexmucheri:cMd7EoTwGglJGXwR@cluster0.uwf6z.mongodb.net/uptime?retryWrites=true&w=majority&appName=Cluster0
+        sync: false
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
-      - key: FRONTEND_URL
-        sync: false
-
-  # Frontend Service
-  - type: web
-    name: uptime-monitor-frontend
-    env: static
-    region: oregon
-    plan: free
-    rootDir: frontend
-    buildCommand: cd .. && npm install && cd frontend && npm install && npm run build
-    staticPublishPath: dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    envVars:
-      - key: VITE_API_URL
-        sync: false
 

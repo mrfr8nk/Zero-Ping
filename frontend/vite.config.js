@@ -5,19 +5,18 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    port: 5173,
+    port: 5000,
     hmr: {
-      clientPort: 443
+      clientPort: 443,
+      protocol: 'wss'
     },
-    allowedHosts: [
-      '.replit.dev',
-      '.repl.co'
-    ],
+    allowedHosts: true,
     proxy: {
       '/api': {
-        target: 'http://0.0.0.0:5000',
+        target: 'http://0.0.0.0:3000',
         changeOrigin: true,
         secure: false,
+        ws: true,
         rewrite: (path) => path
       }
     }

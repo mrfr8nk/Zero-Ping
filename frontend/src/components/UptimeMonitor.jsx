@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = '/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const UptimeMonitor = () => {
   const [services, setServices] = useState([]);

@@ -77,10 +77,9 @@ npm install
 Create a `.env` file in the `backend` directory:
 
 ```env
-MONGODB_URI=mongodb+srv://darexmucheri:cMd7EoTwGglJGXwR@cluster0.uwf6z.mongodb.net/uptime?retryWrites=true&w=majority&appName=Cluster0
+MONGODB_URI=your_mongodb_connection_string_here
 PORT=5000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
+NODE_ENV=production
 ```
 
 Start the backend server:
@@ -93,110 +92,105 @@ npm run dev
 
 The API will be running at `http://localhost:5000`
 
-### 3. Frontend Setup
+### 3. Run the Full Stack Application
 
-Open a new terminal:
+The app is configured to run as a single service. From the root directory:
 
 ```bash
-cd frontend
-npm install
+npm run start
 ```
 
-Create a `.env` file in the `frontend` directory:
+This will:
+1. Start the backend server on port 5000
+2. Serve the pre-built frontend files
+3. Your app will be available at `http://localhost:5000`
 
-```env
-VITE_API_URL=http://localhost:5000
-```
-
-Start the frontend:
-
+**For development with hot-reload:**
 ```bash
 npm run dev
 ```
 
-The app will be running at `http://localhost:5173`
+This runs both frontend (port 5000) and backend (port 3000) with auto-reload.
 
-## Deployment
+## Deployment to Render (Single Service)
 
-### Deploy Backend to Render
+This application is configured to deploy as a **single web service** on Render, with both frontend and backend served from one domain.
+
+### Option 1: Deploy Using render.yaml (Recommended)
 
 1. Push your code to GitHub
+
 2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click "New +" → "Web Service"
+
+3. Click "New +" → "Blueprint"
+
 4. Connect your GitHub repository
+
+5. Render will automatically detect the `render.yaml` file
+
+6. **Important:** Add the MongoDB URI as an environment variable:
+   - Click on the service name
+   - Go to "Environment" tab
+   - Add:
+     - `MONGODB_URI`: Your MongoDB Atlas connection string
+   
+7. Click "Apply" to deploy
+
+### Option 2: Manual Deployment
+
+1. Push your code to GitHub
+
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+
+3. Click "New +" → "Web Service"
+
+4. Connect your GitHub repository
+
 5. Configure:
-   - **Name:** uptime-monitor-backend
-   - **Root Directory:** backend
-   - **Build Command:** `npm install`
-   - **Start Command:** `npm start`
+   - **Name:** zero-ping-uptime-monitor
+   - **Environment:** Node
+   - **Build Command:** `npm install && cd frontend && npm install && npm run build && cd ../backend && npm install`
+   - **Start Command:** `cd backend && node src/server.js`
    - **Environment Variables:**
-     - `MONGODB_URI`: Your MongoDB connection string
+     - `MONGODB_URI`: Your MongoDB Atlas connection string
      - `NODE_ENV`: production
-     - `FRONTEND_URL`: Your frontend URL (add after deploying frontend)
+     - `PORT`: 10000
 
 6. Click "Create Web Service"
 
-### Deploy Frontend to Vercel
+7. Wait for deployment to complete
 
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
+8. Your app will be available at: `https://your-service-name.onrender.com`
 
-2. Deploy frontend:
-```bash
-cd frontend
-vercel
-```
+### How It Works
 
-3. Follow the prompts:
-   - Set up and deploy? Yes
-   - Which scope? Your account
-   - Link to existing project? No
-   - Project name? uptime-monitor-frontend
-   - Directory? ./
-   - Override settings? No
-
-4. Add environment variable in Vercel dashboard:
-   - Go to your project → Settings → Environment Variables
-   - Add: `VITE_API_URL` = Your Render backend URL
-
-5. Redeploy to apply changes:
-```bash
-vercel --prod
-```
-
-### Alternative: Deploy Frontend to Render
-
-1. Go to [Render Dashboard](https://dashboard.render.com/)
-2. Click "New +" → "Static Site"
-3. Connect your GitHub repository
-4. Configure:
-   - **Name:** uptime-monitor-frontend
-   - **Root Directory:** frontend
-   - **Build Command:** `npm install && npm run build`
-   - **Publish Directory:** dist
-   - **Environment Variables:**
-     - `VITE_API_URL`: Your backend URL from Render
-
-5. Click "Create Static Site"
+- The backend Express server serves both:
+  - API endpoints at `/api/*`
+  - Static frontend files from `/` (built React app)
+  
+- All requests are handled by a single service on one domain
+- No CORS issues or separate domain management needed
 
 ## Environment Variables
 
-### Backend (.env)
+### Development (Local)
 
+**Backend (.env):**
 ```env
-MONGODB_URI=<your-mongodb-uri>
+MONGODB_URI=your_mongodb_connection_string
 PORT=5000
 NODE_ENV=production
-FRONTEND_URL=<your-frontend-url>
 ```
 
-### Frontend (.env)
+**Frontend (.env):**
+Not required for single-domain deployment. The frontend automatically uses `/api` for API requests.
 
-```env
-VITE_API_URL=<your-backend-api-url>
-```
+### Production (Render)
+
+Set these in your Render dashboard under Environment tab:
+- `MONGODB_URI`: Your MongoDB Atlas connection string
+- `NODE_ENV`: production
+- `PORT`: 10000 (or your preferred port)
 
 ## API Endpoints
 
@@ -218,7 +212,7 @@ VITE_API_URL=<your-backend-api-url>
 
 ### Health Check
 
-- `GET /health` - API health status
+- `GET /api/health` - API health status
 
 ## How It Works
 
