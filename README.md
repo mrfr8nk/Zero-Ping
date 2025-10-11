@@ -1,177 +1,177 @@
+<div align="center">
 
+# ⚡ Zero Ping Uptime Monitor
 
-# Zero Ping Uptime Monitor
+### Keep Your Services Alive 24/7
 
-A full-stack uptime monitoring service that automatically pings your services to keep them alive. Built with React, Node.js, Express, and MongoDB.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)](https://www.mongodb.com/)
+[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 
-## Features
+A full-stack uptime monitoring service that automatically pings your services to keep them alive. Built with modern web technologies for maximum reliability.
 
-✅ Add unlimited services with custom URLs
-✅ Configurable ping intervals (1-30 minutes)
-✅ Real-time status monitoring
-✅ Response time tracking
-✅ Uptime percentage calculation
-✅ Automatic pinging every minute (checks which services need pinging)
-✅ Pause/Resume services
-✅ MongoDB database integration
-✅ RESTful API
-✅ Beautiful, responsive UI
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [Deployment](#-deployment) • [API](#-api-endpoints)
 
-## Tech Stack
+</div>
 
-**Frontend:**
-- React 18
-- Vite
-- TailwindCSS
-- Lucide Icons
-- Axios
+---
 
-**Backend:**
-- Node.js
-- Express
-- MongoDB (Mongoose)
-- Node-Cron
-- Axios
+## ✨ Features
 
-## Project Structure
+- 🌐 **Unlimited Services** - Add as many services as you need
+- ⏰ **Custom Intervals** - Configure ping intervals from 1-30 minutes
+- 📊 **Real-time Monitoring** - Live status updates every 10 seconds
+- ⚡ **Response Time Tracking** - Monitor service performance
+- 📈 **Uptime Percentage** - Track service reliability
+- 🔄 **Auto-Ping System** - Automatic pinging every minute
+- ⏸️ **Pause/Resume** - Control services without deletion
+- 💾 **MongoDB Integration** - Persistent data storage
+- 🎨 **Beautiful UI** - Modern, responsive design with dark mode
+- 📱 **Mobile Friendly** - Works seamlessly on all devices
+
+## 🛠️ Tech Stack
+
+### Frontend
+<div align="center">
+
+| Technology | Purpose |
+|------------|---------|
+| ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black) | UI Framework |
+| ![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white) | Build Tool |
+| ![TailwindCSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) | Styling |
+| ![Axios](https://img.shields.io/badge/Axios-1.6-5A29E4?style=for-the-badge&logo=axios&logoColor=white) | HTTP Client |
+| ![Lucide](https://img.shields.io/badge/Lucide-Icons-F56565?style=for-the-badge) | Icons |
+
+</div>
+
+### Backend
+<div align="center">
+
+| Technology | Purpose |
+|------------|---------|
+| ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white) | Runtime |
+| ![Express](https://img.shields.io/badge/Express-4-000000?style=for-the-badge&logo=express&logoColor=white) | Web Framework |
+| ![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?style=for-the-badge&logo=mongodb&logoColor=white) | Database |
+| ![Node-Cron](https://img.shields.io/badge/Node--Cron-3-E34F26?style=for-the-badge) | Task Scheduler |
+
+</div>
+
+## 📁 Project Structure
 
 ```
 uptime-monitor/
-├── backend/          # Node.js/Express API
+├── 📂 backend/          # Node.js/Express API
 │   ├── src/
-│   │   ├── models/   # MongoDB models
-│   │   ├── routes/   # API routes
-│   │   ├── jobs/     # Cron jobs for pinging
-│   │   └── server.js # Main server file
+│   │   ├── models/      # MongoDB models
+│   │   ├── routes/      # API routes
+│   │   ├── jobs/        # Cron jobs for pinging
+│   │   └── server.js    # Main server file
 │   └── package.json
-├── frontend/         # React application
+├── 📂 frontend/         # React application
 │   ├── src/
 │   │   ├── components/
 │   │   └── App.jsx
 │   └── package.json
-└── README.md
+└── 📄 README.md
 ```
 
-## Installation & Setup
+## 🚀 Installation
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- MongoDB Atlas account (or local MongoDB)
-- Git
+- ✅ Node.js 18+ installed
+- ✅ MongoDB Atlas account (or local MongoDB)
+- ✅ Git
 
-### 1. Clone the repository
+### Quick Start
 
+1. **Clone the repository**
 ```bash
 git clone <your-repo-url>
 cd uptime-monitor
 ```
 
-### 2. Backend Setup
-
+2. **Backend Setup**
 ```bash
 cd backend
 npm install
 ```
 
 Create a `.env` file in the `backend` directory:
-
 ```env
 MONGODB_URI=your_mongodb_connection_string_here
 PORT=5000
 NODE_ENV=production
 ```
 
-Start the backend server:
+3. **Start the Application**
 
-```bash
-npm start
-# or for development with auto-reload
-npm run dev
-```
-
-The API will be running at `http://localhost:5000`
-
-### 3. Run the Full Stack Application
-
-The app is configured to run as a single service. From the root directory:
-
+From the root directory:
 ```bash
 npm run start
 ```
 
 This will:
-1. Start the backend server on port 5000
-2. Serve the pre-built frontend files
-3. Your app will be available at `http://localhost:5000`
+- ✅ Start the backend server on port 5000
+- ✅ Serve the pre-built frontend files
+- ✅ Your app will be available at `http://localhost:5000`
 
 **For development with hot-reload:**
 ```bash
 npm run dev
 ```
 
-This runs both frontend (port 5000) and backend (port 3000) with auto-reload.
+## 🌐 Deployment
 
-## Deployment to Render (Single Service)
+### Deploy to Replit (Recommended)
 
-This application is configured to deploy as a **single web service** on Render, with both frontend and backend served from one domain.
+This application is optimized for Replit deployment as a single web service.
 
-### Option 1: Deploy Using render.yaml (Recommended)
+#### Option 1: Using render.yaml (Recommended)
 
-1. Push your code to GitHub
+1. 📤 Push your code to GitHub
+2. 🔗 Go to [Render Dashboard](https://dashboard.render.com/)
+3. ➕ Click "New +" → "Blueprint"
+4. 🔌 Connect your GitHub repository
+5. 🎯 Render will auto-detect the `render.yaml` file
+6. 🔐 Add environment variables:
+   - `MONGODB_URI`: Your MongoDB Atlas connection string
+7. ✅ Click "Apply" to deploy
 
-2. Go to [Render Dashboard](https://dashboard.render.com/)
+#### Option 2: Manual Deployment
 
-3. Click "New +" → "Blueprint"
-
-4. Connect your GitHub repository
-
-5. Render will automatically detect the `render.yaml` file
-
-6. **Important:** Add the MongoDB URI as an environment variable:
-   - Click on the service name
-   - Go to "Environment" tab
-   - Add:
-     - `MONGODB_URI`: Your MongoDB Atlas connection string
-   
-7. Click "Apply" to deploy
-
-### Option 2: Manual Deployment
-
-1. Push your code to GitHub
-
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-
-3. Click "New +" → "Web Service"
-
-4. Connect your GitHub repository
-
-5. Configure:
+1. 📤 Push your code to GitHub
+2. 🔗 Go to [Render Dashboard](https://dashboard.render.com/)
+3. ➕ Click "New +" → "Web Service"
+4. ⚙️ Configure:
    - **Name:** zero-ping-uptime-monitor
    - **Environment:** Node
-   - **Build Command:** `npm install && cd frontend && npm install && npm run build && cd ../backend && npm install`
-   - **Start Command:** `cd backend && node src/server.js`
+   - **Build Command:** 
+     ```bash
+     npm install && cd frontend && npm install && npm run build && cd ../backend && npm install
+     ```
+   - **Start Command:** 
+     ```bash
+     cd backend && node src/server.js
+     ```
    - **Environment Variables:**
      - `MONGODB_URI`: Your MongoDB Atlas connection string
      - `NODE_ENV`: production
      - `PORT`: 10000
-
-6. Click "Create Web Service"
-
-7. Wait for deployment to complete
-
-8. Your app will be available at: `https://your-service-name.onrender.com`
+5. 🚀 Click "Create Web Service"
+6. ⏳ Wait for deployment to complete
+7. 🎉 Your app will be live!
 
 ### How It Works
 
 - The backend Express server serves both:
-  - API endpoints at `/api/*`
-  - Static frontend files from `/` (built React app)
-  
-- All requests are handled by a single service on one domain
-- No CORS issues or separate domain management needed
+  - 🔌 API endpoints at `/api/*`
+  - 🎨 Static frontend files from `/` (built React app)
+- ✅ All requests handled by a single service on one domain
+- 🚫 No CORS issues or separate domain management needed
 
-## Environment Variables
+## 🔐 Environment Variables
 
 ### Development (Local)
 
@@ -182,9 +182,6 @@ PORT=5000
 NODE_ENV=production
 ```
 
-**Frontend (.env):**
-Not required for single-domain deployment. The frontend automatically uses `/api` for API requests.
-
 ### Production (Render)
 
 Set these in your Render dashboard under Environment tab:
@@ -192,138 +189,97 @@ Set these in your Render dashboard under Environment tab:
 - `NODE_ENV`: production
 - `PORT`: 10000 (or your preferred port)
 
-## API Endpoints
+## 📡 API Endpoints
 
 ### Services
 
-- `GET /api/services` - Get all services
-- `GET /api/services/:id` - Get single service
-- `POST /api/services` - Create new service
-  ```json
-  {
-    "name": "My Service",
-    "url": "https://example.com",
-    "interval": 5
-  }
-  ```
-- `PUT /api/services/:id` - Update service
-- `DELETE /api/services/:id` - Delete service
-- `GET /api/services/:id/stats` - Get service statistics
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/services` | Get all services |
+| `GET` | `/api/services/:id` | Get single service |
+| `POST` | `/api/services` | Create new service |
+| `PUT` | `/api/services/:id` | Update service |
+| `DELETE` | `/api/services/:id` | Delete service |
+| `GET` | `/api/services/:id/stats` | Get service statistics |
 
 ### Health Check
 
-- `GET /api/health` - API health status
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/health` | API health status |
 
-## How It Works
+### Example: Create Service
+```json
+POST /api/services
+{
+  "name": "My Service",
+  "url": "https://example.com",
+  "interval": 5
+}
+```
 
-1. **Add Services**: Enter service name, URL, and ping interval
-2. **Automatic Pinging**: A cron job runs every minute checking which services need to be pinged based on their interval
-3. **Status Updates**: Each ping updates the service status (online/offline), response time, and uptime percentage
-4. **Real-time Dashboard**: The frontend auto-refreshes every 10 seconds to show latest status
-5. **Persistent Storage**: All data is stored in MongoDB for persistence across restarts
+## 💡 How It Works
 
-## Usage Tips
+1. **📝 Add Services** - Enter service name, URL, and ping interval
+2. **⏰ Automatic Pinging** - Cron job runs every minute checking which services need pinging
+3. **📊 Status Updates** - Each ping updates status (online/offline), response time, and uptime
+4. **🔄 Real-time Dashboard** - Frontend auto-refreshes every 10 seconds
+5. **💾 Persistent Storage** - All data stored in MongoDB for persistence
 
-- Use intervals of 5-15 minutes for most services to avoid rate limiting
-- Services can be paused/resumed without deleting them
-- The system tracks last 100 pings for each service
-- Monitor the response times to identify slow services
+## 💡 Usage Tips
 
-## Troubleshooting
+- ⏱️ Use intervals of 5-15 minutes for most services to avoid rate limiting
+- ⏸️ Services can be paused/resumed without deleting them
+- 📈 System tracks last 100 pings for each service
+- 🐌 Monitor response times to identify slow services
+
+## 🐛 Troubleshooting
 
 ### Backend won't start
-- Check MongoDB connection string is correct
-- Ensure MongoDB Atlas allows connections from your IP
-- Verify all dependencies are installed: `npm install`
+- ✅ Check MongoDB connection string is correct
+- ✅ Ensure MongoDB Atlas allows connections from your IP
+- ✅ Verify all dependencies are installed: `npm install`
 
 ### Frontend can't connect to backend
-- Check `VITE_API_URL` in frontend `.env`
-- Ensure backend is running
-- Check CORS settings in backend
+- ✅ Check `VITE_API_URL` in frontend `.env`
+- ✅ Ensure backend is running
+- ✅ Check CORS settings in backend
 
 ### Services not pinging
-- Check backend logs for errors
-- Verify the service URL is accessible
-- Ensure cron job is running (check console logs)
+- ✅ Check backend logs for errors
+- ✅ Verify the service URL is accessible
+- ✅ Ensure cron job is running (check console logs)
 
-## Contributing
+## 🤝 Contributing
 
 Feel free to submit issues and pull requests!
 
-## License
+## 📄 License
 
-MIT License
+MIT License - see the [LICENSE](LICENSE) file for details
 
-## Developer
+## 👨‍💻 Developer
 
-**Built with ❤️ by Mr Frank (Darrell Mucheri)**
+<div align="center">
 
-📱 WhatsApp: +263719647303  
-📧 Email: darrelmucheri@gmail.com
+**Built with ❤️ by [Mr Frank (Darrell Mucheri)](https://github.com/mrfr8nk)**
 
-## Support
+[![GitHub](https://img.shields.io/badge/GitHub-mrfr8nk-181717?style=for-the-badge&logo=github)](https://github.com/mrfr8nk)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-+263719647303-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/263719647303)
+[![Email](https://img.shields.io/badge/Email-darrelmucheri@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:darrelmucheri@gmail.com)
+
+</div>
+
+## 💬 Support
 
 For issues and questions, please open a GitHub issue or contact the developer directly.
-```
 
-## Deployment Instructions Summary
+---
 
-### Quick Deploy to Render (Both Frontend & Backend)
+<div align="center">
 
-1. **Push to GitHub:**
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin <your-github-repo-url>
-git push -u origin main
-```
+**⭐ Star this repo if you find it helpful!**
 
-2. **Deploy Backend:**
-   - Go to Render.com → New Web Service
-   - Connect GitHub repo
-   - Root directory: `backend`
-   - Build: `npm install`
-   - Start: `npm start`
-   - Add environment variables
+Made with 💙 using React, Node.js & MongoDB
 
-3. **Deploy Frontend:**
-   - Render.com → New Static Site
-   - Root directory: `frontend`
-   - Build: `npm install && npm run build`
-   - Publish: `dist`
-   - Add `VITE_API_URL` env variable
-
-4. **Update Backend FRONTEND_URL:**
-   - Go to backend service settings
-   - Update `FRONTEND_URL` with your frontend URL
-   - Redeploy backend
-
-### Quick Deploy to Vercel (Frontend) + Render (Backend)
-
-1. **Deploy Backend to Render** (same as above)
-
-2. **Deploy Frontend to Vercel:**
-```bash
-cd frontend
-vercel
-```
-   - Add `VITE_API_URL` in Vercel dashboard
-   - Redeploy: `vercel --prod`
-
-## Testing Locally
-
-1. Start backend: `cd backend && npm start`
-2. Start frontend: `cd frontend && npm run dev`
-3. Open browser: `http://localhost:5173`
-4. Add a service and watch it ping automatically!
-
-## Notes
-
-- The cron job checks every minute which services need pinging
-- Services are pinged based on their individual intervals
-- MongoDB stores all service data and ping history
-- The system keeps running 24/7 once deployed
-- No browser needs to be open - backend handles all pinging
-
-Enjoy your Zero Ping Uptime Monitor! 🚀
+</div>
