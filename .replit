@@ -37,4 +37,12 @@ args = "cd backend && npm install && node src/server.js"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd frontend && npm install && npm run dev -- --host 0.0.0.0"
+args = "cd frontend && npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
+localPort = 5173
+externalPort = 80
