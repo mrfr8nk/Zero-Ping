@@ -162,45 +162,11 @@ const UptimeMonitor = () => {
   return (
     <div className={`min-h-screen p-4 md:p-8 transition-colors duration-300 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-black' 
+        ? 'bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900' 
         : 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100'
-    }`}>
+    }`} style={{ fontFamily: "'Poppins', sans-serif" }}>
       <div className="max-w-7xl mx-auto">
-        {/* Site Uptime Banner */}
-        <div className={`mb-6 rounded-2xl p-4 backdrop-blur-sm ${
-          isDarkMode
-            ? 'bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20'
-            : 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30'
-        }`}>
-          <div className="flex items-center justify-center gap-3">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-lg shadow-green-500/50"></div>
-            <span className={`font-semibold text-sm md:text-base ${
-              isDarkMode ? 'text-green-400' : 'text-green-700'
-            }`}>
-              Server Active: {formatSiteUptime(siteUptime)}
-            </span>
-          </div>
-        </div>
-
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg shadow-blue-500/50">
-              <Activity className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h1 className={`text-3xl md:text-4xl font-black bg-gradient-to-r ${
-                isDarkMode 
-                  ? 'from-blue-400 via-cyan-400 to-blue-500' 
-                  : 'from-blue-600 via-cyan-600 to-blue-700'
-              } bg-clip-text text-transparent`} style={{ fontFamily: "'Orbitron', 'Exo 2', 'Rajdhani', sans-serif", letterSpacing: '0.05em' }}>
-                Zero Ping Uptime Monitor
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Monitoring Active</span>
-              </div>
-            </div>
-          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
@@ -223,11 +189,32 @@ const UptimeMonitor = () => {
               <RefreshCw className="w-5 h-5" />
             </button>
           </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg shadow-blue-500/50">
+              <Activity className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className={`text-3xl md:text-4xl font-bold ${
+                isDarkMode 
+                  ? 'text-white' 
+                  : 'text-slate-900'
+              }`}>
+                Zero Ping Uptime Monitor
+              </h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Clock className={`w-4 h-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
+                <span className={`text-sm font-medium ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
+                  Site Uptime: {formatSiteUptime(siteUptime)}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className={`backdrop-blur-xl rounded-2xl p-6 mb-8 shadow-xl ${
           isDarkMode
-            ? 'bg-gradient-to-br from-slate-900/50 to-blue-900/30 border border-blue-500/20'
+            ? 'bg-slate-800/40 border border-slate-700/50'
             : 'bg-white/80 border border-blue-200'
         }`}>
           <h2 className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
@@ -303,7 +290,7 @@ const UptimeMonitor = () => {
                 key={service._id}
                 className={`backdrop-blur-xl rounded-2xl p-6 transition-all shadow-lg ${
                   isDarkMode
-                    ? 'bg-gradient-to-br from-slate-900/80 to-blue-900/40 border border-slate-700/50 hover:border-blue-500/50 hover:shadow-blue-500/10'
+                    ? 'bg-slate-800/60 border border-slate-700/50 hover:border-blue-500/50'
                     : 'bg-white/90 border border-gray-200 hover:border-blue-400 hover:shadow-blue-500/20'
                 }`}
               >
@@ -410,7 +397,7 @@ const UptimeMonitor = () => {
         <footer className="mt-12 text-center pb-6">
           <div className={`backdrop-blur-xl rounded-2xl p-6 ${
             isDarkMode
-              ? 'bg-gradient-to-br from-slate-900/50 to-blue-900/30 border border-blue-500/20'
+              ? 'bg-slate-800/40 border border-slate-700/50'
               : 'bg-white/80 border border-blue-200'
           }`}>
             <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
