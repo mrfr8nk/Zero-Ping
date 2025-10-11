@@ -1,11 +1,12 @@
 services:
+  # Backend Service
   - type: web
     name: uptime-monitor-backend
     env: node
     region: oregon
     plan: free
     rootDir: backend
-    buildCommand: npm install
+    buildCommand: cd .. && npm install && cd backend && npm install
     startCommand: node src/server.js
     healthCheckPath: /health
     envVars:
@@ -16,4 +17,22 @@ services:
       - key: PORT
         value: 10000
       - key: FRONTEND_URL
-        value: "*"
+        sync: false
+
+  # Frontend Service
+  - type: web
+    name: uptime-monitor-frontend
+    env: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: cd .. && npm install && cd frontend && npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+
