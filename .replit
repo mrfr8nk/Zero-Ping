@@ -4,3 +4,37 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
+
+[workflows]
+runButton = "Run Full Stack"
+
+[[workflows.workflow]]
+name = "Start Backend"
+author = 48525936
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm install && node src/server.js"
+
+[[workflows.workflow]]
+name = "Start Frontend"
+author = 48525936
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm install && npm run dev -- --host 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Run Full Stack"
+author = 48525936
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm install && node src/server.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm install && npm run dev -- --host 0.0.0.0"
