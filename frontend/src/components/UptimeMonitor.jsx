@@ -166,35 +166,12 @@ const UptimeMonitor = () => {
         : 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100'
     }`} style={{ fontFamily: "'Poppins', sans-serif" }}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className={`p-3 rounded-xl transition-all ${
-                isDarkMode
-                  ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/40'
-                  : 'bg-slate-200 border border-slate-300 text-slate-700 hover:bg-slate-300'
-              }`}
-            >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-            <button
-              onClick={handleRefresh}
-              className={`p-3 rounded-xl transition-all ${
-                isDarkMode
-                  ? 'bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/40'
-                  : 'bg-blue-100 border border-blue-200 text-blue-600 hover:bg-blue-200'
-              } ${refreshing ? 'animate-spin' : ''}`}
-            >
-              <RefreshCw className="w-5 h-5" />
-            </button>
-          </div>
-          
+        <div className="flex flex-col items-center justify-center mb-8 gap-4">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg shadow-blue-500/50">
               <Activity className="w-8 h-8 text-white" />
             </div>
-            <div>
+            <div className="text-center">
               <h1 className={`text-3xl md:text-4xl font-bold ${
                 isDarkMode 
                   ? 'text-white' 
@@ -202,13 +179,36 @@ const UptimeMonitor = () => {
               }`}>
                 Zero Ping Uptime Monitor
               </h1>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center justify-center gap-2 mt-1">
                 <Clock className={`w-4 h-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
                 <span className={`text-sm font-medium ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
                   Site Uptime: {formatSiteUptime(siteUptime)}
                 </span>
               </div>
             </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-lg transition-all ${
+                isDarkMode
+                  ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/40'
+                  : 'bg-slate-200 border border-slate-300 text-slate-700 hover:bg-slate-300'
+              }`}
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={handleRefresh}
+              className={`p-2 rounded-lg transition-all ${
+                isDarkMode
+                  ? 'bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/40'
+                  : 'bg-blue-100 border border-blue-200 text-blue-600 hover:bg-blue-200'
+              } ${refreshing ? 'animate-spin' : ''}`}
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
