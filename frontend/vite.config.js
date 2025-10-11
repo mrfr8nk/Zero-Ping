@@ -15,8 +15,10 @@ export default defineConfig({
     ],
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
+        target: 'http://0.0.0.0:5000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
       }
     }
   }
