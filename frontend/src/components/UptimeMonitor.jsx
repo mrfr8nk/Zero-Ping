@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const UptimeMonitor = () => {
   const [services, setServices] = useState([]);
@@ -207,8 +207,8 @@ const UptimeMonitor = () => {
                       {getStatusIcon(service.status)}
                       <h3 className="text-xl font-semibold text-white">{service.name}</h3>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        service.status === 'online' 
-                          ? 'bg-green-500/20 text-green-300' 
+                        service.status === 'online'
+                          ? 'bg-green-500/20 text-green-300'
                           : service.status === 'offline'
                           ? 'bg-red-500/20 text-red-300'
                           : 'bg-yellow-500/20 text-yellow-300'
@@ -218,8 +218,8 @@ const UptimeMonitor = () => {
                       <button
                         onClick={() => toggleServiceStatus(service)}
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          service.isActive 
-                            ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30' 
+                          service.isActive
+                            ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30'
                             : 'bg-gray-500/20 text-gray-300 hover:bg-gray-500/30'
                         }`}
                       >
@@ -258,8 +258,8 @@ const UptimeMonitor = () => {
                       <div className="bg-white/5 rounded-lg p-3">
                         <div className="text-white/60 text-xs mb-1">Last Ping</div>
                         <div className="text-white font-semibold text-xs">
-                          {service.lastPing 
-                            ? new Date(service.lastPing).toLocaleTimeString() 
+                          {service.lastPing
+                            ? new Date(service.lastPing).toLocaleTimeString()
                             : 'Never'}
                         </div>
                       </div>
