@@ -254,9 +254,16 @@ Feel free to submit issues and pull requests!
 
 MIT License
 
+## Developer
+
+**Built with ❤️ by Mr Frank (Darrell Mucheri)**
+
+📱 WhatsApp: +263719647303  
+📧 Email: darrelmucheri@gmail.com
+
 ## Support
 
-For issues and questions, please open a GitHub issue.
+For issues and questions, please open a GitHub issue or contact the developer directly.
 ```
 
 ## Deployment Instructions Summary
