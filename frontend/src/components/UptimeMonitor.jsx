@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw, Sun, Moon } from 'lucide-react';
+import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw, Sun, Moon, TrendingUp, BarChart3, X } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = '/api';
@@ -20,6 +20,9 @@ const UptimeMonitor = () => {
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : true;
   });
+  const [selectedService, setSelectedService] = useState(null);
+  const [showStatsModal, setShowStatsModal] = useState(false);
+  const [statsTimeRange, setStatsTimeRange] = useState(24);
 
   useEffect(() => {
     loadServices();
@@ -157,6 +160,48 @@ const UptimeMonitor = () => {
     } else {
       return `${secs}s`;
     }
+  };
+
+  const getServiceStats = (service, hours) => {
+    const now = Date.now();
+    const timeRangeMs = hours * 60 * 60 * 1000;
+    const cutoffTime = now - timeRangeMs;
+    
+    const relevantHistory = service.pingHistory?.filter(
+      ping => new Date(ping.timestamp).getTime() > cutoffTime
+    ) || [];
+    
+    if (relevantHistory.length === 0) {
+      return {
+        uptimePercentage: service.totalPings > 0 ? ((service.uptime / service.totalPings) * 100).toFixed(2) : 0,
+        totalPings: 0,
+        successfulPings: 0,
+        failedPings: 0,
+        avgResponseTime: 0,
+        history: []
+      };
+    }
+    
+    const successfulPings = relevantHistory.filter(p => p.status === 'online').length;
+    const failedPings = relevantHistory.length - successfulPings;
+    const uptimePercentage = ((successfulPings / relevantHistory.length) * 100).toFixed(2);
+    const avgResponseTime = Math.round(
+      relevantHistory.reduce((sum, p) => sum + p.responseTime, 0) / relevantHistory.length
+    );
+    
+    return {
+      uptimePercentage,
+      totalPings: relevantHistory.length,
+      successfulPings,
+      failedPings,
+      avgResponseTime,
+      history: relevantHistory
+    };
+  };
+
+  const openStatsModal = (service) => {
+    setSelectedService(service);
+    setShowStatsModal(true);
   };
 
   return (
@@ -299,14 +344,25 @@ const UptimeMonitor = () => {
                     {getStatusIcon(service.status)}
                     <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{service.name}</h3>
                   </div>
-                  <button
-                    onClick={() => handleDeleteService(service._id)}
-                    className={`p-2 rounded-lg transition-colors group ${
-                      isDarkMode ? 'hover:bg-red-500/20' : 'hover:bg-red-100'
-                    }`}
-                  >
-                    <Trash2 className={`w-5 h-5 ${isDarkMode ? 'text-red-400 group-hover:text-red-300' : 'text-red-500 group-hover:text-red-600'}`} />
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => openStatsModal(service)}
+                      className={`p-2 rounded-lg transition-colors group ${
+                        isDarkMode ? 'hover:bg-blue-500/20' : 'hover:bg-blue-100'
+                      }`}
+                      title="View Statistics"
+                    >
+                      <BarChart3 className={`w-5 h-5 ${isDarkMode ? 'text-blue-400 group-hover:text-blue-300' : 'text-blue-500 group-hover:text-blue-600'}`} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteService(service._id)}
+                      className={`p-2 rounded-lg transition-colors group ${
+                        isDarkMode ? 'hover:bg-red-500/20' : 'hover:bg-red-100'
+                      }`}
+                    >
+                      <Trash2 className={`w-5 h-5 ${isDarkMode ? 'text-red-400 group-hover:text-red-300' : 'text-red-500 group-hover:text-red-600'}`} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-3">
@@ -394,7 +450,223 @@ const UptimeMonitor = () => {
           )}
         </div>
 
-        <footer className="mt-12 text-center pb-6">
+        {showStatsModal && selectedService && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowStatsModal(false)}>
+            <div 
+              className={`max-w-6xl w-full max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl ${
+                isDarkMode ? 'bg-slate-900 border border-slate-700' : 'bg-white border border-gray-200'
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={`sticky top-0 z-10 flex items-center justify-between p-6 border-b ${
+                isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-200'
+              }`}>
+                <div>
+                  <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    {selectedService.name} - Analytics
+                  </h2>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                    {selectedService.url}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowStatsModal(false)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDarkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Time Range Selector */}
+                <div className="flex flex-wrap gap-3">
+                  {[24, 48, 72, 168].map((hours) => (
+                    <button
+                      key={hours}
+                      onClick={() => setStatsTimeRange(hours)}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        statsTimeRange === hours
+                          ? isDarkMode
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-blue-600 text-white'
+                          : isDarkMode
+                          ? 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {hours === 168 ? '7 Days' : `${hours}h`}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Stats Overview */}
+                {(() => {
+                  const stats = getServiceStats(selectedService, statsTimeRange);
+                  return (
+                    <>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className={`p-4 rounded-xl ${
+                          isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                        }`}>
+                          <div className={`text-xs uppercase tracking-wide mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>
+                            Uptime
+                          </div>
+                          <div className={`text-2xl font-bold ${
+                            parseFloat(stats.uptimePercentage) >= 99 ? 'text-green-400' :
+                            parseFloat(stats.uptimePercentage) >= 95 ? 'text-yellow-400' :
+                            'text-red-400'
+                          }`}>
+                            {stats.uptimePercentage}%
+                          </div>
+                        </div>
+
+                        <div className={`p-4 rounded-xl ${
+                          isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                        }`}>
+                          <div className={`text-xs uppercase tracking-wide mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>
+                            Total Pings
+                          </div>
+                          <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            {stats.totalPings}
+                          </div>
+                        </div>
+
+                        <div className={`p-4 rounded-xl ${
+                          isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                        }`}>
+                          <div className={`text-xs uppercase tracking-wide mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>
+                            Avg Response
+                          </div>
+                          <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            {stats.avgResponseTime}ms
+                          </div>
+                        </div>
+
+                        <div className={`p-4 rounded-xl ${
+                          isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                        }`}>
+                          <div className={`text-xs uppercase tracking-wide mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>
+                            Failed Pings
+                          </div>
+                          <div className={`text-2xl font-bold ${stats.failedPings > 0 ? 'text-red-400' : isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            {stats.failedPings}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Visual Timeline Chart */}
+                      <div className={`p-6 rounded-xl ${
+                        isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                      }`}>
+                        <h3 className={`text-lg font-semibold mb-4 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                          <TrendingUp className="w-5 h-5" />
+                          Uptime Timeline
+                        </h3>
+                        
+                        <div className="space-y-3">
+                          {stats.history.length > 0 ? (
+                            <div className="flex gap-1 overflow-x-auto pb-2">
+                              {stats.history.slice().reverse().map((ping, idx) => (
+                                <div
+                                  key={idx}
+                                  className={`flex-shrink-0 w-3 h-16 rounded-sm transition-all hover:scale-110 ${
+                                    ping.status === 'online'
+                                      ? 'bg-green-500 hover:bg-green-400'
+                                      : 'bg-red-500 hover:bg-red-400'
+                                  }`}
+                                  title={`${new Date(ping.timestamp).toLocaleString()} - ${ping.status} (${ping.responseTime}ms)`}
+                                />
+                              ))}
+                            </div>
+                          ) : (
+                            <p className={`text-center py-8 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>
+                              No data available for this time range
+                            </p>
+                          )}
+                          
+                          <div className="flex items-center justify-between text-xs pt-2">
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-green-500 rounded-sm" />
+                                <span className={isDarkMode ? 'text-slate-400' : 'text-slate-600'}>Online ({stats.successfulPings})</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-sm" />
+                                <span className={isDarkMode ? 'text-slate-400' : 'text-slate-600'}>Offline ({stats.failedPings})</span>
+                              </div>
+                            </div>
+                            <span className={isDarkMode ? 'text-slate-500' : 'text-slate-600'}>
+                              Last {statsTimeRange}h
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Recent Pings Table */}
+                      <div className={`rounded-xl overflow-hidden ${
+                        isDarkMode ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-50 border border-gray-200'
+                      }`}>
+                        <div className="p-4 border-b border-slate-700">
+                          <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            Recent Ping History
+                          </h3>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className={isDarkMode ? 'bg-slate-900/50' : 'bg-gray-100'}>
+                              <tr>
+                                <th className={`px-4 py-3 text-left text-xs font-semibold uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  Timestamp
+                                </th>
+                                <th className={`px-4 py-3 text-left text-xs font-semibold uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  Status
+                                </th>
+                                <th className={`px-4 py-3 text-left text-xs font-semibold uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  Response Time
+                                </th>
+                                <th className={`px-4 py-3 text-left text-xs font-semibold uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                  Status Code
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {stats.history.slice().reverse().slice(0, 20).map((ping, idx) => (
+                                <tr key={idx} className={`border-t ${isDarkMode ? 'border-slate-800' : 'border-gray-200'}`}>
+                                  <td className={`px-4 py-3 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                    {new Date(ping.timestamp).toLocaleString()}
+                                  </td>
+                                  <td className="px-4 py-3">
+                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                      ping.status === 'online'
+                                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                                    }`}>
+                                      {ping.status}
+                                    </span>
+                                  </td>
+                                  <td className={`px-4 py-3 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                    {ping.responseTime}ms
+                                  </td>
+                                  <td className={`px-4 py-3 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                    {ping.statusCode || 'N/A'}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <footer className="mt-12 text-center pb-6"></footer>
           <div className={`backdrop-blur-xl rounded-2xl p-6 ${
             isDarkMode
               ? 'bg-slate-800/40 border border-slate-700/50'
