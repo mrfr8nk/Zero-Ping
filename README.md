@@ -1,6 +1,5 @@
-### `/README.md`
 
-```markdown
+
 # Zero Ping Uptime Monitor
 
 A full-stack uptime monitoring service that automatically pings your services to keep them alive. Built with React, Node.js, Express, and MongoDB.
