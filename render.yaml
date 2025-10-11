@@ -1,0 +1,47 @@
+# ===========================================
+# FILE: /render.yaml
+# Place this in the ROOT of your repository
+# ===========================================
+
+services:
+  # Backend API Service
+  - type: web
+    name: uptime-monitor-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://darexmucheri:cMd7EoTwGglJGXwR@cluster0.uwf6z.mongodb.net/uptime?retryWrites=true&w=majority&appName=Cluster0
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: https://uptime-monitor.vercel.app
+        # Update this after deploying frontend
+
+  # Frontend Static Site (Optional - if deploying to Render)
+  # Comment this out if deploying frontend to Vercel
+  # - type: web
+  #   name: uptime-monitor-frontend
+  #   env: static
+  #   region: oregon
+  #   plan: free
+  #   rootDir: frontend
+  #   buildCommand: npm install && npm run build
+  #   staticPublishPath: dist
+  #   routes:
+  #     - type: rewrite
+  #       source: /*
+  #       destination: /index.html
+  #   envVars:
+  #     - key: VITE_API_URL
+  #       value: https://zero-uptime.onrender.com
+  #       # Update this with your actual backend URL after deployment
+
+---
