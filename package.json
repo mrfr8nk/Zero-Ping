@@ -1,0 +1,45 @@
+{
+  "name": "uptime-monitor",
+  "version": "1.0.0",
+  "description": "Zero Ping Uptime Monitor - Full Stack Application",
+  "main": "backend/src/server.js",
+  "type": "module",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:frontend",
+    "deploy:backend": "cd backend && npm start",
+    "deploy:frontend": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "uptime",
+    "monitor",
+    "ping",
+    "health-check",
+    "monitoring",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Mr Frank",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/uptime-monitor.git"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
