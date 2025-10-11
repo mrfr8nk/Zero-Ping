@@ -44,7 +44,14 @@ export async function pingAllServices() {
       ]
     });
 
-    console.log(`Pinging ${services.length} services...`);
+    if (services.length === 0) {
+      console.log(`[${new Date().toLocaleTimeString()}] No services to ping`);
+      return;
+    }
+
+    console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    console.log(`[${new Date().toLocaleTimeString()}] Pinging ${services.length} service(s)...`);
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 
     for (const service of services) {
       const result = await pingService(service);
@@ -70,9 +77,28 @@ export async function pingAllServices() {
       
       await service.save();
       
-      console.log(`Pinged ${service.name}: ${service.status} (${result.responseTime}ms)`);
+      const uptimePercent = service.totalPings > 0 
+        ? ((service.uptime / service.totalPings) * 100).toFixed(2) 
+        : 0;
+      
+      const statusEmoji = result.success ? '✅' : '❌';
+      const statusColor = result.success ? '\x1b[32m' : '\x1b[31m';
+      const resetColor = '\x1b[0m';
+      
+      console.log(`${statusEmoji} ${service.name}`);
+      console.log(`   URL: ${service.url}`);
+      console.log(`   Status: ${statusColor}${service.status.toUpperCase()}${resetColor}`);
+      console.log(`   Response Time: ${result.responseTime}ms`);
+      console.log(`   Uptime: ${uptimePercent}%`);
+      console.log(`   Next Ping: ${new Date(service.nextPingAt).toLocaleTimeString()}`);
+      if (result.error) {
+        console.log(`   Error: ${result.error}`);
+      }
+      console.log('');
     }
+    
+    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
   } catch (error) {
-    console.error('Error pinging services:', error);
+    console.error('❌ Error pinging services:', error);
   }
 }

@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import servicesRouter from './routes/services.js';
 import { pingAllServices } from './jobs/pingServices.js';
@@ -40,12 +41,41 @@ app.use(express.json());
 // API Routes
 app.use('/api/services', servicesRouter);
 
+// Uptime tracking
+const uptimeFilePath = path.join(__dirname, '../../uptime.json');
+
+function getUptimeStartTime() {
+  try {
+    if (fs.existsSync(uptimeFilePath)) {
+      const data = JSON.parse(fs.readFileSync(uptimeFilePath, 'utf8'));
+      return new Date(data.startTime);
+    }
+  } catch (error) {
+    console.log('Creating new uptime tracker');
+  }
+  
+  const startTime = new Date();
+  fs.writeFileSync(uptimeFilePath, JSON.stringify({ startTime: startTime.toISOString() }));
+  return startTime;
+}
+
+const serverStartTime = getUptimeStartTime();
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'healthy',
     uptime: process.uptime(),
     timestamp: new Date().toISOString()
+  });
+});
+
+// Site uptime endpoint
+app.get('/api/site-uptime', (req, res) => {
+  const uptimeSeconds = Math.floor((Date.now() - serverStartTime.getTime()) / 1000);
+  res.json({
+    uptimeSeconds,
+    startTime: serverStartTime.toISOString()
   });
 });
 
