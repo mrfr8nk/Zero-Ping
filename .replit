@@ -6,7 +6,7 @@ expertMode = true
 channel = "stable-25_05"
 
 [workflows]
-runButton = "Project"
+runButton = "Full Stack App"
 
 [[workflows.workflow]]
 name = "Start Backend"
@@ -59,6 +59,15 @@ outputType = "webview"
 task = "shell.exec"
 args = "cd backend && npm start"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Full Stack App"
+author = 48536544
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm install && node src/server.js"
 
 [[ports]]
 localPort = 3000
