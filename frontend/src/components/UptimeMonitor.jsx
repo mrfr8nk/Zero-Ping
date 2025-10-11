@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw, Sun, Moon, TrendingUp, BarChart3, X } from 'lucide-react';
 import axios from 'axios';
@@ -666,7 +665,8 @@ const UptimeMonitor = () => {
           </div>
         )}
 
-        <footer className="mt-12 text-center pb-6"></footer>
+                {/* Footer Section - Fixed */}
+        <footer className="mt-12 text-center pb-6">
           <div className={`backdrop-blur-xl rounded-2xl p-6 ${
             isDarkMode
               ? 'bg-slate-800/40 border border-slate-700/50'
