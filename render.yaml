@@ -22,11 +22,11 @@ services:
       - key: PORT
         value: 5000
       - key: FRONTEND_URL
-        value: https://uptime-monitor.vercel.app
+        value: https://zero-uptime.onrender.com
         # Update this after deploying frontend
 
   # Frontend Static Site (Optional - if deploying to Render)
-  # Comment this out if deploying frontend to Vercel
+  #  Comment this out if deploying frontend to Vercel
   # - type: web
   #   name: uptime-monitor-frontend
   #   env: static
