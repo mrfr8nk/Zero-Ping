@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Activity, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const UptimeMonitor = () => {
   const [services, setServices] = useState([]);
@@ -141,7 +141,7 @@ const UptimeMonitor = () => {
             <Plus className="w-5 h-5" />
             Add New Service
           </h2>
-          
+
           {error && (
             <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-4 text-red-200">
               {error}
@@ -226,9 +226,9 @@ const UptimeMonitor = () => {
                         {service.isActive ? 'ACTIVE' : 'PAUSED'}
                       </button>
                     </div>
-                    
+
                     <p className="text-purple-200 mb-3 break-all">{service.url}</p>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                       <div className="bg-white/5 rounded-lg p-3">
                         <div className="text-white/60 text-xs mb-1">Ping Interval</div>
@@ -265,7 +265,7 @@ const UptimeMonitor = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <button
                     onClick={() => deleteService(service._id)}
                     className="ml-4 p-2 hover:bg-red-500/20 rounded-lg transition-colors group"
